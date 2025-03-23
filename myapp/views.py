@@ -1,10 +1,12 @@
 from django.http import JsonResponse
+from google.cloud import pubsub_v1
 import json
 from django.views.decorators.csrf import csrf_exempt
 purchase_mapping = ['consumerId', 'productId', 'productName', 'quantity',
                     'item_price', 'discount', 'tax', 'final_price']
 
 mandatory_fields = ['consumerId', 'productId', 'productName', 'quantity', 'item_price']
+topic_name = 'data_ingestion'
 
 
 @csrf_exempt
@@ -47,7 +49,14 @@ def purchases(request):
                 "final_price": data["final_price"]
             }
 
-            return JsonResponse({"message": "Received Successfully", "data": response_data}, status=201)
+            try:
+                publisher = pubsub_v1.PublisherClient()
+                topic_path = publisher.topic_path("your-project-id", topic_name)
+                message_data = json.dumps(response_data).encode("utf-8")
+                future = publisher.publish(topic_path, message_data)
+                return JsonResponse({"message": "Published to Pubsub", "data": response_data}, status=201)
+            except Exception as e:
+                print(e)
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
