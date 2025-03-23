@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ttom(hvwsxf+=&p@-(g_q+x2zbz+r5+osg@^f(4m@j36m2%j(#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["django-cloudrun-project-157688930781.us-central1.run.app"]
 
 
 # Application definition
