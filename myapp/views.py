@@ -2,6 +2,11 @@ from django.http import JsonResponse
 from google.cloud import pubsub_v1
 import json
 from django.views.decorators.csrf import csrf_exempt
+import logging
+
+logging.basicConfig(level=logging.INFO)  # Set logging level
+logger = logging.getLogger(__name__)
+
 purchase_mapping = ['consumerId', 'productId', 'productName', 'quantity',
                     'item_price', 'discount', 'tax', 'final_price']
 
@@ -13,11 +18,12 @@ topic_name = 'data_ingestion'
 def purchases(request):
     if request.method == "POST":
         try:
+            logger.info("Function started...")
             # Parse JSON data from request body
             data = json.loads(request.body)
             mandatory_flag = True
 
-            print(data)
+            logger.info(data)
 
             for field in mandatory_fields:
                 if data.get(field) is None:
@@ -35,7 +41,8 @@ def purchases(request):
             total_price = abs(int(data.get('quantity'))) * abs(int(data.get('item_price')))
             total_discounted_price = total_price - total_price * int(data.get('discount')) / 100
             total_taxed_price = total_discounted_price + int(data.get('tax')) * total_discounted_price / 100
-            data['final_price'] = total_discounted_price
+            data['final_price'] = total_taxed_price
+            logger.info(f"total_taxed_price is {total_taxed_price}")
 
             # Process the purchase (dummy logic for now)
             response_data = {
@@ -54,6 +61,7 @@ def purchases(request):
                 topic_path = publisher.topic_path("your-project-id", topic_name)
                 message_data = json.dumps(response_data).encode("utf-8")
                 future = publisher.publish(topic_path, message_data)
+                logger.info(f"msg published to pubsub {topic_name}")
                 return JsonResponse({"message": "Published to Pubsub", "data": response_data}, status=201)
             except Exception as e:
                 print(e)
