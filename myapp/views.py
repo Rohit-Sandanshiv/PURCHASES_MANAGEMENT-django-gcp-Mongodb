@@ -44,7 +44,6 @@ def purchases(request):
             total_discounted_price = total_price - total_price * int(data.get('discount')) / 100
             total_taxed_price = total_discounted_price + int(data.get('tax')) * total_discounted_price / 100
             data['final_price'] = total_taxed_price
-            logger.info(f"total_taxed_price is {total_taxed_price}")
 
             # Process the purchase (dummy logic for now)
             response_data = {
@@ -63,11 +62,7 @@ def purchases(request):
                 topic_path = publisher.topic_path(projectId, topic_name)
                 message_data = json.dumps(response_data).encode("utf-8")
                 future = publisher.publish(topic_path, message_data)
-                logger.info(f"topic_name {topic_name}")
-                logger.info(f"topic_path {topic_path}")
 
-                message_id = future.result()  # Wait for message to be published
-                logger.info(f"Message published to Pub/Sub: {message_id}")
                 return JsonResponse({"message": "Published to Pubsub", "data": response_data}, status=201)
             except Exception as e:
                 logger.error(f"Error publishing to Pub/Sub: {e}")
