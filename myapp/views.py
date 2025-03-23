@@ -49,7 +49,7 @@ def purchases(request):
             # Process the purchase (dummy logic for now)
             response_data = {
                 "consumerId": data["consumerId"],
-                "product_id": data["productId"],
+                "productId": data["productId"],
                 "quantity": data["quantity"],
                 "productName": data["productName"],
                 "item_price": data["item_price"],
@@ -66,7 +66,8 @@ def purchases(request):
                 logger.info(f"msg published to pubsub {topic_name}")
                 return JsonResponse({"message": "Published to Pubsub", "data": response_data}, status=201)
             except Exception as e:
-                print(e)
+                logger.error(f"Error publishing to Pub/Sub: {e}")
+                return JsonResponse({"error": "Failed to publish to Pub/Sub"}, status=500)
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
