@@ -63,7 +63,11 @@ def purchases(request):
                 topic_path = publisher.topic_path(projectId, topic_name)
                 message_data = json.dumps(response_data).encode("utf-8")
                 future = publisher.publish(topic_path, message_data)
-                logger.info(f"msg published to pubsub {topic_name}")
+                logger.info(f"topic_name {topic_name}")
+                logger.info(f"topic_path {topic_path}")
+
+                message_id = future.result()  # Wait for message to be published
+                logger.info(f"Message published to Pub/Sub: {message_id}")
                 return JsonResponse({"message": "Published to Pubsub", "data": response_data}, status=201)
             except Exception as e:
                 logger.error(f"Error publishing to Pub/Sub: {e}")
