@@ -11,7 +11,9 @@ purchase_mapping = ['consumerId', 'productId', 'productName', 'quantity',
                     'item_price', 'discount', 'tax', 'final_price']
 
 mandatory_fields = ['consumerId', 'productId', 'productName', 'quantity', 'item_price']
+
 topic_name = 'data_ingestion'
+projectId = 'project-gcp-pipeline'
 
 
 @csrf_exempt
@@ -58,7 +60,7 @@ def purchases(request):
 
             try:
                 publisher = pubsub_v1.PublisherClient()
-                topic_path = publisher.topic_path("your-project-id", topic_name)
+                topic_path = publisher.topic_path(projectId, topic_name)
                 message_data = json.dumps(response_data).encode("utf-8")
                 future = publisher.publish(topic_path, message_data)
                 logger.info(f"msg published to pubsub {topic_name}")
