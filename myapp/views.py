@@ -8,9 +8,9 @@ logging.basicConfig(level=logging.INFO)  # Set logging level
 logger = logging.getLogger(__name__)
 
 purchase_mapping = ['consumerId', 'productId', 'productName', 'quantity',
-                    'item_price', 'discount', 'tax', 'final_price']
+                    'item_price', 'discount', 'tax', 'final_price', 'invoice_date']
 
-mandatory_fields = ['consumerId', 'productId', 'productName', 'quantity', 'item_price']
+mandatory_fields = ['consumerId', 'productId', 'productName', 'quantity', 'item_price', 'invoice_date']
 
 topic_name = 'data_ingestion'
 projectId = 'project-gcp-pipeline'
@@ -54,7 +54,8 @@ def purchases(request):
                 "item_price": data["item_price"],
                 "discount": data["discount"],
                 "tax": data["tax"],
-                "final_price": data["final_price"]
+                "final_price": data["final_price"],
+                "invoice_date": data["invoice_date"]
             }
 
             try:
