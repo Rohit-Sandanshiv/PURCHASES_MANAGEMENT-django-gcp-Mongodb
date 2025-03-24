@@ -90,6 +90,8 @@ Django_API/
 ### 1. Insert Purchase Data
 **Endpoint:** ` -X POST https://django-cloudrun-project-157688930781.us-central1.run.app/purchases/`
 
+**url for cmd:** `curl -X POST https://django-cloudrun-project-157688930781.us-central1.run.app/purchases/ -H "Content-Type: application/json" -d " { \"consumerId\": \"MH_JL_000003\", \"productId\": \"P102\", \"quantity\": \"2\", \"productName\": \"sunscreen\", \"item_price\": \"1000\", \"discount\": \"10\", \"tax\": \"10\", \"invoice_date\":\"24-03-2024\" }"`
+
 **Payload:**
 ```json
 { 
