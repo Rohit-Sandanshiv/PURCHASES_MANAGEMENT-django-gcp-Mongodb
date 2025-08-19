@@ -81,7 +81,7 @@ Django_API/
 ### Steps
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/Rohit-Sandanshiv/django_cloudRun_Project.git
+   git clone https://github.com/Rohit-Sandanshiv/PURCHASES_MANAGEMENT-django-gcp-Mongodb.git
    cd django_cloudRun_Project.git
    ```
 ---
